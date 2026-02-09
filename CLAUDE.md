@@ -72,4 +72,44 @@ All kernels implement: `C = alpha * A*B + beta * C` with parameters `(A, B, C, M
 ## Documentation
 
 - `docs/ANALYSIS_GUIDE.md` — Nsight Compute profiling guide with SOL analysis and SASS verification.
-- `docs/education/` — 11 comprehensive Korean-language educational modules covering GPU architecture through advanced optimization.
+- `docs/education/` — 14 comprehensive Korean-language educational modules covering GPU architecture through advanced optimization.
+- `docs/gamification/` — 6 design documents for the gamification system (narrative, economy, mechanics, portfolio, motivation, tech guide).
+
+## Education Game ("GPU Architect: Rise from Silicon")
+
+`game/` contains a playable web-based gamification layer over the education content. It is a vanilla JS SPA with no build step.
+
+### File Structure
+
+| File | Role | Lines |
+|------|------|-------|
+| `game/index.html` | HTML + CSS (dark silicon theme) | ~167 |
+| `game/data.js` | All content data (75 quizzes, code traces, reviews, bosses, shop, achievements) | ~420 |
+| `game/app.js` | Game engine (state, navigation, 10 screens, combo/GFLOP/s systems) | ~633 |
+| `game/gpu_architect.html` | Single-file version (all 3 inlined, offline playable) | ~1225 |
+
+### Game Data Schema
+
+- `MODULES[11]` — Module definitions with flags (`hasQuiz`, `hasSim`, `hasCode`, `hasReview`, `mastery`, `boss`)
+- `RANKS[8]` — Rank progression (intern → chip architect) with GFLOP/s and cuBLAS% thresholds
+- `QUIZZES{modId: [{q, o[4], a, b:bloomLevel, e}]}` — 75 questions across 10 modules
+- `CODE_TRACES{modId: {title, code, steps[{prompt, answer, hint}]}}` — 6 modules (04-09), code from actual `src/kernels/`
+- `REVIEWS{modId: [{q, o[4], a}]}` — 6 modules (04-09), 3 pre-review questions each
+- `BOSSES{bossId: {name, module, phases[{title, desc, q, o, a, e}]}}` — 3 boss fights, 3 phases each
+
+### Game State
+
+Persisted in `localStorage` key `gpu_architect_save`. Key fields: `fc`, `sc`, `rankIdx`, `completed[]`, `masteryPassed[]`, `bossCleared[]`, `quizScores{}`, `codeTracesDone{}`, `maxCombo`, `gflops`, `streak`, `inventory{}`, `earnedBadges[]`.
+
+### Development Direction
+
+The game currently implements the core learning loop with quiz, code tracing, memory challenge, and boss fight mechanics. Future development areas:
+
+1. **Simulation games (Game E)** — Interactive visualizations for 10 simulations from module 13 (thread-to-SM mapping, bank conflict detector, pipeline timeline, etc.)
+2. **Concept matching (Game B)** — Drag-and-drop matching of analogies↔diagrams↔formulas
+3. **Teach-back (Game D)** — Keyword-based explanation exercises for "why it works" sections
+4. **Portfolio/export** — Learning timeline, radar chart (6-axis competency), PDF certificate, JSON export
+5. **Leaderboard** — Opt-in percentile bands or competitive ranking
+6. **Recovery mechanics** — Streak freeze tokens, comeback quest chains for returning learners
+
+Design docs in `docs/gamification/` provide complete specifications for all planned features.

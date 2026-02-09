@@ -35,7 +35,14 @@ baremetal-sgemm/
 │   ├── build.sh                  # 빌드 스크립트
 │   └── compile_ptx.sh            # PTX 컴파일 스크립트
 ├── docs/
-│   └── ANALYSIS_GUIDE.md         # Nsight Compute 분석 가이드
+│   ├── ANALYSIS_GUIDE.md         # Nsight Compute 분석 가이드
+│   ├── education/                # 한국어 교육 모듈 (14개)
+│   └── gamification/             # 게임화 설계 문서 (6개)
+├── game/
+│   ├── index.html                # 게임 UI (HTML + CSS)
+│   ├── data.js                   # 게임 데이터 (75 퀴즈, 코드 추적 등)
+│   ├── app.js                    # 게임 엔진 (SPA)
+│   └── gpu_architect.html        # 단일 파일 버전 (오프라인 플레이)
 └── CMakeLists.txt
 ```
 
@@ -178,6 +185,51 @@ asm volatile("cp.async.cg.shared.global [%0], [%1], 16;"
    - Nsight Compute SASS 분석
    - SOL 분석 및 병목 지점 파악
    - 레지스터 압박 및 스필링 감지
+
+## 🎮 교육 게임: GPU Architect — Rise from Silicon
+
+BareMetal-SGEMM 교육 과정을 게임화한 웹 기반 학습 도구입니다. 브라우저에서 바로 플레이할 수 있습니다.
+
+### 실행 방법
+
+```bash
+# 단일 파일 버전 (권장)
+open game/gpu_architect.html    # macOS
+xdg-open game/gpu_architect.html  # Linux
+
+# 또는 로컬 서버
+cd game && python3 -m http.server 8080
+# http://localhost:8080 접속
+```
+
+### 콘텐츠 구성
+
+| 항목 | 수량 | 설명 |
+|------|------|------|
+| 퀴즈 | 75문항 | 모듈별 5-10문항, Bloom's Taxonomy 6단계 |
+| 코드 추적 | 6개 | 실제 `src/kernels/` 커널 코드 기반 스텝 실행 |
+| 기억력 챌린지 | 6개 | 60초 타이머, 이전 모듈 복습 |
+| 보스전 | 3개 | 뱅크 충돌 수호자, 레이턴시 드래곤, 최종 벤치마크 |
+| 배지 | 22개 | 4티어 (모듈 완료 / 마스터리 / 스킬 / 히든) |
+
+### 게임 시스템
+
+- **직급 체계**: 수습 엔지니어 → 칩 아키텍트 (8단계)
+- **이중 재화**: FLOP 코인 (FC, 학습 활동) + 실리콘 크리스탈 (SC, 탁월한 성취)
+- **GFLOP/s 미터**: 학습 성과를 실제 커널 성능 수치에 매핑
+- **콤보 시스템**: 연속 정답 시 x1 → x1.5 → x2 → x3 보상 배율
+- **상점**: FC/SC로 힌트, 재시도 토큰, 코스메틱 구매
+
+### 설계 문서
+
+게임화 설계 문서는 `docs/gamification/`에 있습니다:
+
+- `01_게임화_개요.md` — 내러티브, 직급 체계, 설계 원칙
+- `02_재화_및_경제_시스템.md` — 이중 재화 모델, 상점, 경제 균형
+- `03_게임_메커니즘.md` — 9-섹션 퀘스트 체인, 6가지 게임 유형, 보스전
+- `04_이력_및_포트폴리오.md` — 타임라인, 레이더 차트, 업적, 내보내기
+- `05_동기_설계.md` — 동기 루프, 회복 메커니즘, 리더보드
+- `06_기술_구현_가이드.md` — 웹앱 아키텍처, 데이터 스키마, 파싱 전략
 
 ## 📝 참고 자료
 
